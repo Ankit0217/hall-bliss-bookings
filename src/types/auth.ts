@@ -1,9 +1,8 @@
 
+import { User } from '@supabase/supabase-js';
+
 export interface UserSession {
-  user: {
-    id: string;
-    email: string;
-  } | null;
+  user: User | null;
   session: any | null;
 }
 

@@ -9,7 +9,113 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      bookings: {
+        Row: {
+          created_at: string
+          end_time: string
+          event_date: string
+          guest_count: number
+          id: string
+          start_time: string
+          status: string
+          total_price: number
+          user_id: string
+          venue_id: string
+        }
+        Insert: {
+          created_at?: string
+          end_time: string
+          event_date: string
+          guest_count: number
+          id?: string
+          start_time: string
+          status?: string
+          total_price: number
+          user_id: string
+          venue_id: string
+        }
+        Update: {
+          created_at?: string
+          end_time?: string
+          event_date?: string
+          guest_count?: number
+          id?: string
+          start_time?: string
+          status?: string
+          total_price?: number
+          user_id?: string
+          venue_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "venues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          full_name: string | null
+          id: string
+          phone: string | null
+        }
+        Insert: {
+          created_at?: string
+          full_name?: string | null
+          id: string
+          phone?: string | null
+        }
+        Update: {
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+        }
+        Relationships: []
+      }
+      venues: {
+        Row: {
+          amenities: string[] | null
+          capacity: number
+          created_at: string
+          description: string
+          id: string
+          images: string[] | null
+          location: string
+          name: string
+          price_per_hour: number
+          slug: string
+        }
+        Insert: {
+          amenities?: string[] | null
+          capacity: number
+          created_at?: string
+          description: string
+          id?: string
+          images?: string[] | null
+          location: string
+          name: string
+          price_per_hour: number
+          slug: string
+        }
+        Update: {
+          amenities?: string[] | null
+          capacity?: number
+          created_at?: string
+          description?: string
+          id?: string
+          images?: string[] | null
+          location?: string
+          name?: string
+          price_per_hour?: number
+          slug?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

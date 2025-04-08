@@ -1,13 +1,16 @@
 
 import React, { useState, useEffect } from 'react';
 import { cn } from "@/lib/utils";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User, LogOut } from "lucide-react";
+import { useAuth } from '@/contexts/AuthContext';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { session, signOut } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,6 +26,22 @@ const Navbar = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  const handleAuthAction = () => {
+    if (session.user) {
+      signOut();
+    } else {
+      navigate('/auth');
+    }
+  };
+
+  const handleBookNow = () => {
+    if (session.user) {
+      navigate('/book');
+    } else {
+      navigate('/auth');
+    }
+  };
 
   return (
     <nav
@@ -62,9 +81,42 @@ const Navbar = () => {
               <Link to="/contact" className="text-gray-700 hover:text-wedding-gold transition-colors duration-200">
                 Contact
               </Link>
-              <Button variant="outline" className="border-wedding-gold text-wedding-gold hover:bg-wedding-gold hover:text-white transition duration-300">
-                Book Now
-              </Button>
+              
+              {session.user ? (
+                <div className="flex items-center space-x-4">
+                  <Button 
+                    variant="outline" 
+                    className="flex items-center space-x-2 border-wedding-gold text-wedding-gold hover:bg-wedding-gold hover:text-white transition duration-300"
+                    onClick={signOut}
+                  >
+                    <LogOut className="h-4 w-4" />
+                    <span>Sign Out</span>
+                  </Button>
+                  <Button 
+                    className="bg-wedding-gold hover:bg-wedding-gold/90"
+                    onClick={() => navigate('/book')}
+                  >
+                    Book Now
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex items-center space-x-4">
+                  <Button 
+                    variant="outline" 
+                    className="border-wedding-gold text-wedding-gold hover:bg-wedding-gold hover:text-white transition duration-300"
+                    onClick={() => navigate('/auth')}
+                  >
+                    <User className="h-4 w-4 mr-2" />
+                    Sign In
+                  </Button>
+                  <Button 
+                    className="bg-wedding-gold hover:bg-wedding-gold/90"
+                    onClick={handleBookNow}
+                  >
+                    Book Now
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
 
@@ -106,9 +158,40 @@ const Navbar = () => {
             <Link to="/contact" className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md">
               Contact
             </Link>
-            <Button className="w-full mt-2 bg-wedding-gold hover:bg-wedding-gold/90">
-              Book Now
-            </Button>
+            
+            {session.user ? (
+              <>
+                <button 
+                  onClick={signOut}
+                  className="flex items-center w-full px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sign Out
+                </button>
+                <Button 
+                  className="w-full mt-2 bg-wedding-gold hover:bg-wedding-gold/90"
+                  onClick={() => navigate('/book')}
+                >
+                  Book Now
+                </Button>
+              </>
+            ) : (
+              <>
+                <button 
+                  onClick={() => navigate('/auth')}
+                  className="flex items-center w-full px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md"
+                >
+                  <User className="h-4 w-4 mr-2" />
+                  Sign In
+                </button>
+                <Button 
+                  className="w-full mt-2 bg-wedding-gold hover:bg-wedding-gold/90"
+                  onClick={handleBookNow}
+                >
+                  Book Now
+                </Button>
+              </>
+            )}
           </div>
         </div>
       )}

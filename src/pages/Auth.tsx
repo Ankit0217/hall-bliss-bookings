@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Loader2, Info } from 'lucide-react';
+import { ArrowLeft, Loader2 } from 'lucide-react';
 
 import {
   Form,
@@ -19,7 +19,6 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
 
 const loginSchema = z.object({
@@ -62,14 +61,6 @@ const Auth = () => {
 
   const handleDemoLogin = () => {
     demoLogin();
-  };
-  
-  const handleAdminSignup = async () => {
-    await signUp('admin@admin.com', 'adminhu');
-    toast({
-      title: "Admin account created!",
-      description: "You can now sign in with the admin account.",
-    });
   };
 
   return (
@@ -181,31 +172,7 @@ const Auth = () => {
               </TabsContent>
             </Tabs>
             
-            <Alert className="mt-6 bg-amber-50 border-amber-200">
-              <Info className="h-4 w-4" />
-              <AlertDescription className="text-sm text-amber-800">
-                To create the admin account, use the "Sign Up" tab with email: admin@admin.com and password: adminhu.
-                Alternatively, click the button below:
-              </AlertDescription>
-            </Alert>
-
-            <div className="mt-4 flex flex-col space-y-2">
-              <Button 
-                variant="outline" 
-                className="w-full"
-                onClick={handleAdminSignup}
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Loading...
-                  </>
-                ) : (
-                  "Create Admin Account"
-                )}
-              </Button>
-              
+            <div className="mt-4">
               <div className="relative mt-2">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-300"></div>
@@ -217,7 +184,7 @@ const Auth = () => {
               
               <Button 
                 variant="outline" 
-                className="w-full"
+                className="w-full mt-4"
                 onClick={handleDemoLogin}
                 disabled={isLoading}
               >

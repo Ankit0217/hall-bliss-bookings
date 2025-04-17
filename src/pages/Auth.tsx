@@ -1,11 +1,11 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuth } from '@/contexts/AuthContext';
-import { Link } from 'react-router-dom';
-import { ArrowLeft, Loader2 } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ArrowLeft, Loader2, Info } from 'lucide-react';
 
 import {
   Form,
@@ -19,6 +19,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useToast } from '@/hooks/use-toast';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address' }),
@@ -27,7 +29,16 @@ const loginSchema = z.object({
 
 const Auth = () => {
   const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
-  const { signIn, signUp, demoLogin, isLoading } = useAuth();
+  const { signIn, signUp, demoLogin, isLoading, session } = useAuth();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (session.user) {
+      navigate('/');
+    }
+  }, [session.user, navigate]);
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -42,11 +53,23 @@ const Auth = () => {
       await signIn(data.email, data.password);
     } else {
       await signUp(data.email, data.password);
+      toast({
+        title: "Account created!",
+        description: "Please check your email to confirm your account, or try signing in if email confirmation is disabled.",
+      });
     }
   };
 
   const handleDemoLogin = () => {
     demoLogin();
+  };
+  
+  const handleAdminSignup = async () => {
+    await signUp('admin@admin.com', 'adminhu');
+    toast({
+      title: "Admin account created!",
+      description: "You can now sign in with the admin account.",
+    });
   };
 
   return (
@@ -158,19 +181,43 @@ const Auth = () => {
               </TabsContent>
             </Tabs>
             
-            <div className="mt-6 text-center">
-              <div className="relative">
+            <Alert className="mt-6 bg-amber-50 border-amber-200">
+              <Info className="h-4 w-4" />
+              <AlertDescription className="text-sm text-amber-800">
+                To create the admin account, use the "Sign Up" tab with email: admin@admin.com and password: adminhu.
+                Alternatively, click the button below:
+              </AlertDescription>
+            </Alert>
+
+            <div className="mt-4 flex flex-col space-y-2">
+              <Button 
+                variant="outline" 
+                className="w-full"
+                onClick={handleAdminSignup}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Loading...
+                  </>
+                ) : (
+                  "Create Admin Account"
+                )}
+              </Button>
+              
+              <div className="relative mt-2">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-300"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">Or continue with</span>
+                  <span className="px-2 bg-white text-gray-500">Or</span>
                 </div>
               </div>
               
               <Button 
                 variant="outline" 
-                className="mt-4 w-full"
+                className="w-full"
                 onClick={handleDemoLogin}
                 disabled={isLoading}
               >

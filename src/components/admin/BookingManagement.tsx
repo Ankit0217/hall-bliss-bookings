@@ -1,9 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
 import { venues } from '@/data/venues';
 import { useToast } from '@/hooks/use-toast';
+import { Booking } from '@/types/booking';
 import { 
   Table, 
   TableHeader, 
@@ -40,21 +40,6 @@ import {
 } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-
-type Booking = {
-  id: string;
-  user_id: string;
-  venue_id: string;
-  event_date: string;
-  start_time: string;
-  end_time: string;
-  guest_count: number;
-  total_price: number;
-  status: 'pending' | 'confirmed' | 'cancelled';
-  created_at: string;
-  userEmail?: string;
-  venueName?: string;
-};
 
 const BookingManagement = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -96,7 +81,9 @@ const BookingManagement = () => {
             ...booking,
             userEmail: userData?.user?.email || 'Unknown',
             venueName: venue?.name || 'Unknown Venue',
-          };
+            // Ensure status is one of the allowed values
+            status: booking.status as 'pending' | 'confirmed' | 'cancelled'
+          } as Booking;
         })
       );
 
@@ -165,6 +152,7 @@ const BookingManagement = () => {
           event_date: updatedBooking.event_date,
           start_time: updatedBooking.start_time,
           end_time: updatedBooking.end_time,
+          status: updatedBooking.status || selectedBooking.status
         })
         .eq('id', selectedBooking.id);
 
@@ -175,10 +163,11 @@ const BookingManagement = () => {
         booking.id === selectedBooking.id
           ? { 
               ...booking, 
-              guest_count: updatedBooking.guest_count || booking.guest_count,
-              event_date: updatedBooking.event_date || booking.event_date,
-              start_time: updatedBooking.start_time || booking.start_time,
-              end_time: updatedBooking.end_time || booking.end_time,
+              guest_count: updatedBooking.guest_count ?? booking.guest_count,
+              event_date: updatedBooking.event_date ?? booking.event_date,
+              start_time: updatedBooking.start_time ?? booking.start_time,
+              end_time: updatedBooking.end_time ?? booking.end_time,
+              status: updatedBooking.status ?? booking.status,
             } 
           : booking
       ));

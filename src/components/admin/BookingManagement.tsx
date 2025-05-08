@@ -66,6 +66,8 @@ const BookingManagement = () => {
 
       if (bookingsError) throw bookingsError;
 
+      console.log('Fetched bookings:', bookingsData);
+
       // Get user emails for each booking
       const bookingsWithUserInfo = await Promise.all(
         (bookingsData || []).map(async (booking) => {
@@ -74,6 +76,8 @@ const BookingManagement = () => {
             .auth
             .admin
             .getUserById(booking.user_id);
+
+          console.log('User data for booking:', booking.id, userData);
 
           // Get venue name using the venues data from local data file
           // Convert venue_id to string for comparison since venue IDs in the venues data are strings
@@ -89,6 +93,7 @@ const BookingManagement = () => {
         })
       );
 
+      console.log('Processed bookings with user info:', bookingsWithUserInfo);
       setBookings(bookingsWithUserInfo);
     } catch (error) {
       console.error('Error fetching bookings:', error);

@@ -1,6 +1,5 @@
-
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { venues } from '@/data/venues';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -8,12 +7,15 @@ import { Button } from '@/components/ui/button';
 import { MapPin, Users, Calendar, Star, Check } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/components/ui/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 
 const VenueDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const [venue, setVenue] = useState(venues.find(v => v.slug === slug));
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { toast } = useToast();
+  const { session } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (slug) {
@@ -59,10 +61,18 @@ const VenueDetail = () => {
   };
 
   const handleBookNow = () => {
-    toast({
-      title: "Booking Request Initiated",
-      description: `Your request to book ${venue.name} has been received. We'll contact you shortly to confirm details.`,
-    });
+    if (!session?.user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please log in to book this venue.",
+        variant: "destructive",
+      });
+      navigate('/auth');
+      return;
+    }
+    
+    // Redirect to booking page with venue pre-selected
+    navigate('/book', { state: { selectedVenue: venue.id } });
   };
 
   return (

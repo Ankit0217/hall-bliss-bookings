@@ -29,11 +29,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { CalendarIcon, CheckCircle } from 'lucide-react';
+import { CalendarIcon, CheckCircle, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { venues } from '@/data/venues';
 import { useToast } from '@/components/ui/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -47,7 +50,10 @@ const formSchema = z.object({
 
 const Booking = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const { session } = useAuth();
+  const navigate = useNavigate();
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -61,17 +67,67 @@ const Booking = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    // In a real app, you would submit this data to your backend
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    // Check if user is logged in
+    if (!session?.user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please log in to submit a booking request.",
+        variant: "destructive",
+      });
+      navigate('/auth');
+      return;
+    }
     
-    // Show success message
-    toast({
-      title: "Booking request submitted!",
-      description: "We've received your booking request and will contact you soon to confirm details.",
-    });
-    
-    setIsSubmitted(true);
+    try {
+      setIsSubmitting(true);
+      console.log(values);
+      
+      // Calculate total price based on venue hourly rate (assuming 6 hours for event)
+      const selectedVenue = venues.find(venue => venue.id === values.venueId);
+      const hourlyRate = selectedVenue ? parseFloat(selectedVenue.priceRange.replace(/[^0-9]/g, '')) / 100 : 1000;
+      const totalPrice = hourlyRate * 6; // 6 hours event duration
+      
+      // Format date for database (YYYY-MM-DD)
+      const formattedDate = format(values.date, 'yyyy-MM-dd');
+      
+      // Default times (can be customized later)
+      const startTime = '18:00';
+      const endTime = '00:00';
+      
+      // Insert booking into database
+      const { data, error } = await supabase
+        .from('bookings')
+        .insert({
+          user_id: session.user.id,
+          venue_id: values.venueId,
+          event_date: formattedDate,
+          start_time: startTime,
+          end_time: endTime,
+          guest_count: parseInt(values.guestCount),
+          total_price: totalPrice,
+          status: 'pending'
+        });
+      
+      if (error) throw error;
+      
+      // Show success message
+      toast({
+        title: "Booking request submitted!",
+        description: "We've received your booking request and will contact you soon to confirm details.",
+      });
+      
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error('Error submitting booking:', error);
+      toast({
+        title: "Submission Error",
+        description: "There was a problem submitting your booking. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (isSubmitted) {
@@ -177,7 +233,7 @@ const Booking = () => {
                           </FormControl>
                           <SelectContent>
                             {venues.map((venue) => (
-                              <SelectItem key={venue.id} value={venue.id.toString()}>
+                              <SelectItem key={venue.id} value={venue.id}>
                                 {venue.name}
                               </SelectItem>
                             ))}
@@ -262,8 +318,19 @@ const Booking = () => {
                     )}
                   />
                   
-                  <Button type="submit" className="w-full bg-wedding-gold hover:bg-wedding-gold/90">
-                    Submit Booking Request
+                  <Button 
+                    type="submit" 
+                    className="w-full bg-wedding-gold hover:bg-wedding-gold/90"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Submitting...
+                      </>
+                    ) : (
+                      "Submit Booking Request"
+                    )}
                   </Button>
                 </form>
               </Form>

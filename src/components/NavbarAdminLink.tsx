@@ -10,7 +10,7 @@ const NavbarAdminLink = () => {
 
   useEffect(() => {
     const checkAdminRole = async () => {
-      if (!session.user) {
+      if (!session?.user) {
         setIsAdmin(false);
         return;
       }
@@ -28,7 +28,7 @@ const NavbarAdminLink = () => {
     };
 
     checkAdminRole();
-  }, [session.user]);
+  }, [session?.user]);
 
   if (!isAdmin) {
     return null;

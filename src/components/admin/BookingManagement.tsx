@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
@@ -75,7 +76,8 @@ const BookingManagement = () => {
             .getUserById(booking.user_id);
 
           // Get venue name using the venues data from local data file
-          const venue = venues.find(v => v.id === booking.venue_id);
+          // Convert venue_id to string for comparison since venue IDs in the venues data are strings
+          const venue = venues.find(v => v.id === booking.venue_id.toString());
           
           return {
             ...booking,

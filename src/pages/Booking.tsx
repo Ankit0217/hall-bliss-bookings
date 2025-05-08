@@ -36,7 +36,7 @@ import { venues } from '@/data/venues';
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -54,6 +54,8 @@ const Booking = () => {
   const { toast } = useToast();
   const { session } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const preselectedVenueId = location.state?.selectedVenue ? String(location.state.selectedVenue) : '';
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -61,7 +63,7 @@ const Booking = () => {
       name: '',
       email: '',
       phone: '',
-      venueId: '',
+      venueId: preselectedVenueId,
       guestCount: '',
       message: '',
     },
@@ -84,7 +86,7 @@ const Booking = () => {
       console.log(values);
       
       // Calculate total price based on venue hourly rate (assuming 6 hours for event)
-      const selectedVenue = venues.find(venue => venue.id === values.venueId);
+      const selectedVenue = venues.find(venue => venue.id.toString() === values.venueId);
       const hourlyRate = selectedVenue ? parseFloat(selectedVenue.priceRange.replace(/[^0-9]/g, '')) / 100 : 1000;
       const totalPrice = hourlyRate * 6; // 6 hours event duration
       
@@ -233,7 +235,7 @@ const Booking = () => {
                           </FormControl>
                           <SelectContent>
                             {venues.map((venue) => (
-                              <SelectItem key={venue.id} value={venue.id}>
+                              <SelectItem key={venue.id} value={venue.id.toString()}>
                                 {venue.name}
                               </SelectItem>
                             ))}

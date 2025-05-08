@@ -72,7 +72,7 @@ const VenueDetail = () => {
     }
     
     // Redirect to booking page with venue pre-selected
-    navigate('/book', { state: { selectedVenue: venue.id } });
+    navigate('/book', { state: { selectedVenue: venue.id.toString() } });
   };
 
   return (

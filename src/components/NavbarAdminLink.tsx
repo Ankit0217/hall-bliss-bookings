@@ -16,13 +16,16 @@ const NavbarAdminLink = () => {
       }
 
       try {
+        console.log('NavbarAdminLink: Checking admin role for user ID:', session.user.id);
         const { data, error } = await supabase
           .rpc('has_role', { user_id: session.user.id, role: 'admin' });
 
+        console.log('NavbarAdminLink: Admin role check result:', { data, error });
+        
         if (error) throw error;
         setIsAdmin(!!data);
       } catch (error) {
-        console.error('Error checking admin role:', error);
+        console.error('NavbarAdminLink: Error checking admin role:', error);
         setIsAdmin(false);
       }
     };

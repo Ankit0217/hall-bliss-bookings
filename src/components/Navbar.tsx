@@ -1,10 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { cn } from "@/lib/utils";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X, User, LogOut } from "lucide-react";
 import { useAuth } from '@/contexts/AuthContext';
+import NavbarAdminLink from './NavbarAdminLink';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -82,6 +82,8 @@ const Navbar = () => {
                 Contact
               </Link>
               
+              <NavbarAdminLink />
+              
               {session.user ? (
                 <div className="flex items-center space-x-4">
                   <Button 
@@ -158,6 +160,8 @@ const Navbar = () => {
             <Link to="/contact" className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md">
               Contact
             </Link>
+            
+            <NavbarAdminLink />
             
             {session.user ? (
               <>

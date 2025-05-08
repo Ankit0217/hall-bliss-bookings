@@ -17,23 +17,29 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     const checkAdminRole = async () => {
-      if (!session.user) {
+      if (!session?.user) {
         navigate('/auth');
         return;
       }
 
       try {
+        console.log('Checking admin role for user ID:', session.user.id);
         const { data, error } = await supabase
           .rpc('has_role', { user_id: session.user.id, role: 'admin' });
 
+        console.log('Admin role check result:', { data, error });
+        
         if (error) throw error;
         
-        setIsAdmin(data);
+        setIsAdmin(!!data);
         setIsLoading(false);
         
         if (!data) {
           // Not an admin, redirect to home
+          console.log('User is not an admin, redirecting to home');
           navigate('/');
+        } else {
+          console.log('User is an admin, showing admin dashboard');
         }
       } catch (error) {
         console.error('Error checking admin role:', error);
@@ -44,7 +50,7 @@ const AdminDashboard = () => {
     };
 
     checkAdminRole();
-  }, [session.user, navigate]);
+  }, [session?.user, navigate]);
 
   if (isLoading) {
     return (

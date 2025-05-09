@@ -51,7 +51,7 @@ const FeaturedVenues = () => {
                 
                 <div className="flex items-center justify-between">
                   <p className="text-wedding-navy font-medium">{venue.priceRange}</p>
-                  <p className="text-gray-600 text-sm">{venue.capacity}</p>
+                  <p className="text-gray-600 text-sm">{venue.capacity.min}-{venue.capacity.max} guests</p>
                 </div>
                 
                 <Button 

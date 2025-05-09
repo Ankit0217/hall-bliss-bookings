@@ -116,7 +116,7 @@ const Booking = () => {
         .from('bookings')
         .insert({
           user_id: session.user.id,
-          venue_id: selectedVenue.uuid, // Use UUID here
+          venue_id: selectedVenue.uuid,
           event_date: formattedDate,
           start_time: startTime,
           end_time: endTime,

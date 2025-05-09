@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Booking } from '@/types/booking';
 import { supabase } from '@/integrations/supabase/client';
@@ -37,8 +36,7 @@ const BookingManagement = () => {
       // Get bookings from Supabase with user email
       const { data: bookingsData, error: bookingsError } = await supabase
         .from('bookings')
-        .select('*, profiles:user_id(email)')
-        .order('created_at', { ascending: false });
+        .select('*, profiles:user_id(email)');
       
       if (bookingsError) {
         console.error("Error fetching bookings:", bookingsError);

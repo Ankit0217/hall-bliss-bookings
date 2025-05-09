@@ -10,6 +10,10 @@ export interface Booking {
   total_price: number;
   status: 'pending' | 'confirmed' | 'cancelled';
   created_at: string;
+  updated_at?: string;
   userEmail?: string;
   venueName?: string;
+  profiles?: {
+    email: string;
+  }
 }

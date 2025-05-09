@@ -9,13 +9,84 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      bookings: {
+        Row: {
+          created_at: string
+          end_time: string
+          event_date: string
+          guest_count: number
+          id: string
+          start_time: string
+          status: string
+          total_price: number
+          updated_at: string
+          user_id: string
+          venue_id: string
+        }
+        Insert: {
+          created_at?: string
+          end_time: string
+          event_date: string
+          guest_count: number
+          id?: string
+          start_time: string
+          status: string
+          total_price: number
+          updated_at?: string
+          user_id: string
+          venue_id: string
+        }
+        Update: {
+          created_at?: string
+          end_time?: string
+          event_date?: string
+          guest_count?: number
+          id?: string
+          start_time?: string
+          status?: string
+          total_price?: number
+          updated_at?: string
+          user_id?: string
+          venue_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: { user_id: string; role: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

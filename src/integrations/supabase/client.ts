@@ -11,6 +11,10 @@ const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiO
 
 export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
+// Admin credentials for direct login access
+export const ADMIN_EMAIL = "admin@hallbliss.com";
+export const ADMIN_PASSWORD = "admin123";
+
 // Define our custom database types to use with TypeScript
 export type Tables = Database['public']['Tables'];
 export type Enums = Database['public']['Enums'];

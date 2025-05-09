@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Loader2 } from 'lucide-react';
+import { ArrowLeft, Loader2, Shield } from 'lucide-react';
 
 import {
   Form,
@@ -28,7 +28,7 @@ const loginSchema = z.object({
 
 const Auth = () => {
   const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
-  const { signIn, signUp, demoLogin, isLoading, session } = useAuth();
+  const { signIn, signUp, demoLogin, adminLogin, isLoading, session } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -61,6 +61,10 @@ const Auth = () => {
 
   const handleDemoLogin = () => {
     demoLogin();
+  };
+
+  const handleAdminLogin = () => {
+    adminLogin();
   };
 
   return (
@@ -182,21 +186,42 @@ const Auth = () => {
                 </div>
               </div>
               
-              <Button 
-                variant="outline" 
-                className="w-full mt-4"
-                onClick={handleDemoLogin}
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Loading...
-                  </>
-                ) : (
-                  "Try Demo Account"
-                )}
-              </Button>
+              <div className="space-y-3 mt-4">
+                <Button 
+                  variant="outline" 
+                  className="w-full"
+                  onClick={handleDemoLogin}
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Loading...
+                    </>
+                  ) : (
+                    "Try Demo Account"
+                  )}
+                </Button>
+                
+                <Button 
+                  variant="outline" 
+                  className="w-full bg-gray-50 border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex items-center justify-center gap-2"
+                  onClick={handleAdminLogin}
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Loading...
+                    </>
+                  ) : (
+                    <>
+                      <Shield className="h-4 w-4" />
+                      <span>Administrator Login</span>
+                    </>
+                  )}
+                </Button>
+              </div>
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-2">

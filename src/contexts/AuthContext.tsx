@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase, ADMIN_EMAIL, ADMIN_PASSWORD } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { UserSession } from '@/types/auth';
 import { useNavigate } from 'react-router-dom';
@@ -12,6 +12,7 @@ interface AuthContextProps {
   signUp: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   demoLogin: () => Promise<void>;
+  adminLogin: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -152,8 +153,46 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const adminLogin = async () => {
+    try {
+      setIsLoading(true);
+      // Use admin credentials
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: ADMIN_EMAIL,
+        password: ADMIN_PASSWORD
+      });
+      
+      if (error) {
+        throw error;
+      }
+
+      // Set admin role metadata if not already set
+      if (!data.user?.user_metadata?.role) {
+        await supabase.auth.updateUser({
+          data: { role: 'admin' }
+        });
+      }
+      
+      toast({
+        title: "Admin mode activated!",
+        description: "You are now logged in as an administrator.",
+      });
+      
+      // Redirect directly to admin dashboard
+      navigate('/admin');
+    } catch (error: any) {
+      toast({
+        title: "Admin login failed",
+        description: error.message || "Failed to log in as administrator. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ session, isLoading, signIn, signUp, signOut, demoLogin }}>
+    <AuthContext.Provider value={{ session, isLoading, signIn, signUp, signOut, demoLogin, adminLogin }}>
       {children}
     </AuthContext.Provider>
   );

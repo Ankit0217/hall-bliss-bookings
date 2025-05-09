@@ -44,7 +44,7 @@ const AdminDashboard = () => {
         } else {
           console.log('User is an admin, showing admin dashboard');
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error checking admin role:', error);
         setIsAdmin(false);
         setIsLoading(false);

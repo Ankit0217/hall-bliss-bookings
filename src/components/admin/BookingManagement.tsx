@@ -21,7 +21,7 @@ import {
 import { venues } from '@/data/venues';
 import { format } from 'date-fns';
 import { ChevronDown, CheckCircle2, XCircle, Clock } from 'lucide-react';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 
 const BookingManagement = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -34,24 +34,27 @@ const BookingManagement = () => {
       setLoading(true);
       setError(null);
       
-      // Get bookings from Supabase
+      // Get bookings from Supabase with user email
       const { data: bookingsData, error: bookingsError } = await supabase
         .from('bookings')
-        .select('*, user:user_id(email)')
+        .select('*, profiles:user_id(email)')
         .order('created_at', { ascending: false });
       
-      if (bookingsError) throw bookingsError;
+      if (bookingsError) {
+        console.error("Error fetching bookings:", bookingsError);
+        throw bookingsError;
+      }
       
       console.log('Fetched booking data:', bookingsData);
       
       // Transform the data and add venue names from the venues data
       const transformedBookings: Booking[] = bookingsData.map((booking: any) => {
-        // Find the venue from the local data
-        const venue = venues.find(v => v.id.toString() === booking.venue_id);
+        // Find the venue from the local data using the UUID
+        const venue = venues.find(v => v.uuid === booking.venue_id);
         
         return {
           ...booking,
-          userEmail: booking.user?.email || 'Unknown',
+          userEmail: booking.profiles?.email || 'Unknown',
           venueName: venue?.name || 'Unknown Venue',
         };
       });

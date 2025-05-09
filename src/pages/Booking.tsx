@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { useForm } from 'react-hook-form';
@@ -33,7 +33,7 @@ import { CalendarIcon, CheckCircle, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { venues } from '@/data/venues';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -69,6 +69,12 @@ const Booking = () => {
     },
   });
 
+  // Debug logging for venue ID
+  useEffect(() => {
+    console.log("Preselected venue ID:", preselectedVenueId);
+    console.log("Available venues:", venues.map(v => ({ id: v.id, name: v.name })));
+  }, [preselectedVenueId]);
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     // Check if user is logged in
     if (!session?.user) {
@@ -83,10 +89,18 @@ const Booking = () => {
     
     try {
       setIsSubmitting(true);
-      console.log(values);
+      console.log("Form values:", values);
+      
+      // Find the selected venue and get UUID from venues data
+      const selectedVenue = venues.find(venue => venue.id.toString() === values.venueId);
+      
+      if (!selectedVenue) {
+        throw new Error("Selected venue not found");
+      }
+      
+      console.log("Selected venue:", selectedVenue);
       
       // Calculate total price based on venue hourly rate (assuming 6 hours for event)
-      const selectedVenue = venues.find(venue => venue.id.toString() === values.venueId);
       const hourlyRate = selectedVenue ? parseFloat(selectedVenue.priceRange.replace(/[^0-9]/g, '')) / 100 : 1000;
       const totalPrice = hourlyRate * 6; // 6 hours event duration
       
@@ -97,12 +111,12 @@ const Booking = () => {
       const startTime = '18:00';
       const endTime = '00:00';
       
-      // Insert booking into database
+      // Insert booking into database with UUID for venue
       const { data, error } = await supabase
         .from('bookings')
         .insert({
           user_id: session.user.id,
-          venue_id: values.venueId,
+          venue_id: selectedVenue.uuid, // Use UUID here
           event_date: formattedDate,
           start_time: startTime,
           end_time: endTime,
@@ -111,7 +125,12 @@ const Booking = () => {
           status: 'pending'
         });
       
-      if (error) throw error;
+      if (error) {
+        console.error("Booking submission error:", error);
+        throw error;
+      }
+      
+      console.log("Booking submitted successfully:", data);
       
       // Show success message
       toast({
@@ -120,11 +139,11 @@ const Booking = () => {
       });
       
       setIsSubmitted(true);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error submitting booking:', error);
       toast({
         title: "Submission Error",
-        description: "There was a problem submitting your booking. Please try again.",
+        description: error.message || "There was a problem submitting your booking. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -227,7 +246,7 @@ const Booking = () => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Venue</FormLabel>
-                        <Select onValueChange={field.onChange} value={field.value}>
+                        <Select onValueChange={field.onChange} value={field.value || ""}>
                           <FormControl>
                             <SelectTrigger>
                               <SelectValue placeholder="Select a venue" />

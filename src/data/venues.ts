@@ -1,150 +1,140 @@
 
+// Update the venues data to include UUIDs
 export interface Venue {
   id: number;
+  uuid: string; // Add UUID field for database compatibility
   name: string;
   slug: string;
   description: string;
-  shortDescription: string;
-  capacity: {
-    min: number;
-    max: number;
-  };
   priceRange: string;
-  images: string[];
-  features: string[];
-  address: string;
+  capacity: string;
   location: string;
   rating: number;
-  reviews: number;
+  featuredImage: string;
+  gallery: string[];
+  amenities: string[];
+  availability: boolean;
 }
 
 export const venues: Venue[] = [
   {
     id: 1,
-    name: "The Grand Ballroom",
-    slug: "grand-ballroom",
-    description: "The Grand Ballroom is our most opulent and spacious venue, featuring crystal chandeliers, marble flooring, and floor-to-ceiling windows that bathe the space in natural light. The elegant decor and high ceilings create a sense of grandeur perfect for couples seeking a lavish wedding celebration. The venue includes a separate cocktail area, bridal suite, and access to our manicured gardens for photos.",
-    shortDescription: "An opulent ballroom with crystal chandeliers and marble flooring, perfect for grand celebrations.",
-    capacity: {
-      min: 150,
-      max: 500
-    },
-    priceRange: "$10,000 - $20,000",
-    images: [
-      "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=1498&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1519741347686-c1e331bd7f18?q=80&w=1169&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?q=80&w=1073&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1507504031003-b417219a0fde?q=80&w=1170&auto=format&fit=crop"
+    uuid: 'e29c4a7e-9c0b-4996-a984-8649c5981b15', // Add UUID for database
+    name: 'The Grand Ballroom',
+    slug: 'grand-ballroom',
+    description: 'An elegant and spacious ballroom with crystal chandeliers and marble floors, perfect for large wedding celebrations.',
+    priceRange: '$5,000 - $10,000',
+    capacity: 'Up to 500 guests',
+    location: 'Downtown',
+    rating: 4.9,
+    featuredImage: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=1498&auto=format&fit=crop',
+    gallery: [
+      'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=1498&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?q=80&w=1469&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1513278974582-3e1b4a4fa21e?q=80&w=1470&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1521139174183-9c1018928cbb?q=80&w=1481&auto=format&fit=crop'
     ],
-    features: [
-      "Crystal chandeliers",
-      "Marble dance floor",
-      "State-of-the-art sound system",
-      "Bridal suite",
-      "Outdoor garden access",
-      "Full-service bar",
-      "Customizable lighting",
-      "Grand staircase"
-    ],
-    address: "123 Elegance Way, Beverly Hills, CA 90210",
-    location: "Beverly Hills",
-    rating: 4.8,
-    reviews: 156
+    amenities: ['Bridal Suite', 'Catering Services', 'Dance Floor', 'Lighting/Sound', 'Parking', 'Wheelchair Access'],
+    availability: true
   },
   {
     id: 2,
-    name: "Seaside Terrace",
-    slug: "seaside-terrace",
-    description: "Exchange vows with the sound of waves and breathtaking ocean views as your backdrop. Our Seaside Terrace offers an intimate open-air setting perched on coastal cliffs, with a covered reception area featuring retractable glass walls to bring the outside in. This venue is perfect for couples who dream of a beach wedding without getting sand between their toes. The terrace can be transformed from a ceremony space to a reception area, allowing your guests to enjoy the coastal beauty throughout your celebration.",
-    shortDescription: "A breathtaking oceanfront venue with panoramic sea views and fresh coastal breezes.",
-    capacity: {
-      min: 50,
-      max: 180
-    },
-    priceRange: "$8,000 - $15,000",
-    images: [
-      "https://images.unsplash.com/photo-1506784365847-bbad939e9335?q=80&w=1168&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1527722123791-52e8f7713321?q=80&w=1915&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1537640538966-79f369143f8f?q=80&w=1173&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1439539698758-ba2680ecadb9?q=80&w=1170&auto=format&fit=crop"
+    uuid: '5f9d1e6c-93e7-4d44-8d70-32b7a775c348', // Add UUID for database
+    name: 'Seaside Terrace',
+    slug: 'seaside-terrace',
+    description: 'A beautiful outdoor venue with panoramic ocean views, perfect for sunset ceremonies and receptions.',
+    priceRange: '$6,000 - $12,000',
+    capacity: 'Up to 200 guests',
+    location: 'Coastal Area',
+    rating: 4.8,
+    featuredImage: 'https://images.unsplash.com/photo-1505944270255-72b8c68c6a70?q=80&w=1470&auto=format&fit=crop',
+    gallery: [
+      'https://images.unsplash.com/photo-1505944270255-72b8c68c6a70?q=80&w=1470&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1519671482248-7c6a3c66fecb?q=80&w=1470&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1544124499-58912edb4b6a?q=80&w=1470&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1517722014278-c256a91a6fba?q=80&w=1470&auto=format&fit=crop'
     ],
-    features: [
-      "Panoramic ocean views",
-      "Outdoor ceremony space",
-      "Covered reception area",
-      "Retractable glass walls",
-      "Private beach access",
-      "Sunset photo opportunities",
-      "Cooling sea breeze",
-      "In-house catering"
-    ],
-    address: "789 Ocean View Drive, Malibu, CA 90265",
-    location: "Malibu",
-    rating: 4.9,
-    reviews: 128
+    amenities: ['Ocean View', 'Outdoor Ceremony Space', 'Covered Reception Area', 'In-house Catering', 'Bar Service', 'Setup & Cleanup'],
+    availability: true
   },
   {
     id: 3,
-    name: "Vineyard Estate",
-    slug: "vineyard-estate",
-    description: "Nestled among rolling hills and rows of grapevines, our Vineyard Estate offers rustic elegance in a picturesque countryside setting. The renovated 19th-century barn features exposed wooden beams, wrought iron chandeliers, and large barn doors that open to reveal stunning vineyard views. This venue includes a ceremony site in the heart of the vineyard, a spacious reception barn, and access to our wine cellar for unique photo opportunities. The Vineyard Estate is ideal for couples seeking a charming, rustic-chic atmosphere with the warmth of wine country hospitality.",
-    shortDescription: "A rustic-elegant estate surrounded by vineyards and rolling hills, perfect for wine lovers.",
-    capacity: {
-      min: 80,
-      max: 250
-    },
-    priceRange: "$7,500 - $14,000",
-    images: [
-      "https://images.unsplash.com/photo-1510076857177-7470076d4098?q=80&w=1472&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1505944270255-72b8c68c6a70?q=80&w=1170&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=1170&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1624397640148-949b1732bb0a?q=80&w=1974&auto=format&fit=crop"
-    ],
-    features: [
-      "Vineyard ceremony site",
-      "Renovated historic barn",
-      "Wine tasting option",
-      "Exclusive wine bottles for guests",
-      "Outdoor fire pits",
-      "Vineyard tours",
-      "Farm-to-table dining options",
-      "On-site lodging available"
-    ],
-    address: "456 Vineyard Lane, Napa, CA 94558",
-    location: "Napa Valley",
+    uuid: '7c538a02-d34d-4f9a-bd46-06a9315b20d9', // Add UUID for database
+    name: 'Rustic Vineyard Estate',
+    slug: 'rustic-vineyard',
+    description: 'A charming vineyard setting with rustic barns, rolling hills, and beautiful gardens for an intimate countryside wedding.',
+    priceRange: '$4,000 - $8,000',
+    capacity: 'Up to 150 guests',
+    location: 'Wine Country',
     rating: 4.7,
-    reviews: 94
+    featuredImage: 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?q=80&w=1470&auto=format&fit=crop',
+    gallery: [
+      'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?q=80&w=1470&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1510076857177-7470076d4098?q=80&w=1472&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1472653431158-6364773b2a56?q=80&w=1469&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1505944428981-85149b2989e2?q=80&w=1470&auto=format&fit=crop'
+    ],
+    amenities: ['Vineyard Views', 'Indoor & Outdoor Spaces', 'Wine Tasting', 'Accommodation Available', 'Pet Friendly', 'Photo Opportunities'],
+    availability: true
   },
   {
     id: 4,
-    name: "Garden Pavilion",
-    slug: "garden-pavilion",
-    description: "Our Garden Pavilion is a botanical paradise featuring lush gardens, colorful flowerbeds, and a stunning glass-walled pavilion. This venue offers the beauty of an outdoor wedding with the comfort and security of an indoor space. The transparent walls and ceiling allow natural light to flood the space while providing protection from the elements. Surrounded by meticulously landscaped gardens with fountains and pathways, this venue creates a magical setting for both ceremonies and receptions. The Garden Pavilion is perfect for couples who want to be immersed in natural beauty without worrying about weather conditions.",
-    shortDescription: "A glass pavilion surrounded by lush gardens, fountains and blooming flowers.",
-    capacity: {
-      min: 60,
-      max: 200
-    },
-    priceRange: "$6,000 - $12,000",
-    images: [
-      "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?q=80&w=1073&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1503789146722-cf137a3c0fea?q=80&w=1170&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1667923158465-0d2e9fb24d57?q=80&w=2002&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1508901129611-5a5e65c50f18?q=80&w=987&auto=format&fit=crop"
+    uuid: 'bf45a24f-4b09-4c9c-91d2-7a7bcfb3b8a2', // Add UUID for database
+    name: 'Historic Mansion',
+    slug: 'historic-mansion',
+    description: 'An elegant 19th-century mansion with manicured gardens, ornate architecture, and timeless charm for a sophisticated wedding.',
+    priceRange: '$7,000 - $15,000',
+    capacity: 'Up to 250 guests',
+    location: 'Heritage District',
+    rating: 4.9,
+    featuredImage: 'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?q=80&w=1480&auto=format&fit=crop',
+    gallery: [
+      'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?q=80&w=1480&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1523301343968-6a6ebf63c672?q=80&w=1469&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=1470&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1502786129293-79981df4e689?q=80&w=1472&auto=format&fit=crop'
     ],
-    features: [
-      "Glass-walled pavilion",
-      "Botanical gardens",
-      "Water features",
-      "Garden path lighting",
-      "Climate controlled",
-      "Indoor/outdoor flexibility",
-      "Butterfly garden",
-      "Photography spots throughout"
-    ],
-    address: "321 Botanical Avenue, Pasadena, CA 91105",
-    location: "Pasadena",
+    amenities: ['Historic Architecture', 'Grand Staircase', 'Multiple Event Spaces', 'Bridal Suite', 'Gourmet Catering', 'Valet Parking'],
+    availability: true
+  },
+  {
+    id: 5,
+    uuid: '9a208d5e-8c62-4958-954b-8f91d82c0837', // Add UUID for database
+    name: 'Mountain Lodge Retreat',
+    slug: 'mountain-lodge',
+    description: 'A cozy mountain lodge with stunning natural surroundings, perfect for an intimate wedding with breathtaking views.',
+    priceRange: '$3,500 - $7,000',
+    capacity: 'Up to 100 guests',
+    location: 'Mountain Range',
     rating: 4.6,
-    reviews: 82
+    featuredImage: 'https://images.unsplash.com/photo-1470290378973-039446646d34?q=80&w=1470&auto=format&fit=crop',
+    gallery: [
+      'https://images.unsplash.com/photo-1470290378973-039446646d34?q=80&w=1470&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1542592997-221a9e3d01c7?q=80&w=1469&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1508950914441-2165b1c63c8b?q=80&w=1470&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1542729114-128966940e1c?q=80&w=1470&auto=format&fit=crop'
+    ],
+    amenities: ['Mountain Views', 'Fireplace', 'Outdoor Ceremony Area', 'Indoor Reception', 'On-site Accommodations', 'Hiking Trails'],
+    availability: true
+  },
+  {
+    id: 6,
+    uuid: '2c407b9d-67e9-4fc5-8c3c-89e4923ceaa4', // Add UUID for database
+    name: 'Urban Rooftop Loft',
+    slug: 'urban-rooftop',
+    description: 'A modern, industrial-chic loft space with a rooftop terrace offering spectacular city views for a contemporary wedding.',
+    priceRange: '$4,500 - $9,000',
+    capacity: 'Up to 180 guests',
+    location: 'City Center',
+    rating: 4.7,
+    featuredImage: 'https://images.unsplash.com/photo-1519671482248-7c6a3c66fecb?q=80&w=1470&auto=format&fit=crop',
+    gallery: [
+      'https://images.unsplash.com/photo-1519671482248-7c6a3c66fecb?q=80&w=1470&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=1470&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=1469&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1517502884422-41eaead166d4?q=80&w=1525&auto=format&fit=crop'
+    ],
+    amenities: ['City Skyline Views', 'Indoor/Outdoor Spaces', 'Modern Decor', 'Sound System', 'Customizable Lighting', 'Event Coordinator'],
+    availability: true
   }
 ];

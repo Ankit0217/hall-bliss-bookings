@@ -27,7 +27,7 @@ const FeaturedVenues = () => {
             >
               <div className="relative h-64 overflow-hidden">
                 <img
-                  src={venue.images[0]}
+                  src={venue.featuredImage}
                   alt={venue.name}
                   className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                 />
@@ -47,11 +47,11 @@ const FeaturedVenues = () => {
                 
                 <p className="text-gray-500 mb-2">{venue.location}</p>
                 
-                <p className="text-gray-700 mb-4">{venue.shortDescription}</p>
+                <p className="text-gray-700 mb-4">{venue.description.substring(0, 100)}...</p>
                 
                 <div className="flex items-center justify-between">
                   <p className="text-wedding-navy font-medium">{venue.priceRange}</p>
-                  <p className="text-gray-600 text-sm">Up to {venue.capacity.max} guests</p>
+                  <p className="text-gray-600 text-sm">{venue.capacity}</p>
                 </div>
                 
                 <Button 

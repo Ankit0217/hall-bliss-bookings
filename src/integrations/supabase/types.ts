@@ -9,146 +9,16 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      bookings: {
-        Row: {
-          created_at: string
-          end_time: string
-          event_date: string
-          guest_count: number
-          id: string
-          start_time: string
-          status: string
-          total_price: number
-          user_id: string
-          venue_id: string
-        }
-        Insert: {
-          created_at?: string
-          end_time: string
-          event_date: string
-          guest_count: number
-          id?: string
-          start_time: string
-          status?: string
-          total_price: number
-          user_id: string
-          venue_id: string
-        }
-        Update: {
-          created_at?: string
-          end_time?: string
-          event_date?: string
-          guest_count?: number
-          id?: string
-          start_time?: string
-          status?: string
-          total_price?: number
-          user_id?: string
-          venue_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "bookings_venue_id_fkey"
-            columns: ["venue_id"]
-            isOneToOne: false
-            referencedRelation: "venues"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      profiles: {
-        Row: {
-          created_at: string
-          full_name: string | null
-          id: string
-          phone: string | null
-        }
-        Insert: {
-          created_at?: string
-          full_name?: string | null
-          id: string
-          phone?: string | null
-        }
-        Update: {
-          created_at?: string
-          full_name?: string | null
-          id?: string
-          phone?: string | null
-        }
-        Relationships: []
-      }
-      user_roles: {
-        Row: {
-          created_at: string | null
-          id: string
-          role: Database["public"]["Enums"]["app_role"]
-          user_id: string
-        }
-        Insert: {
-          created_at?: string | null
-          id?: string
-          role?: Database["public"]["Enums"]["app_role"]
-          user_id: string
-        }
-        Update: {
-          created_at?: string | null
-          id?: string
-          role?: Database["public"]["Enums"]["app_role"]
-          user_id?: string
-        }
-        Relationships: []
-      }
-      venues: {
-        Row: {
-          amenities: string[] | null
-          capacity: number
-          created_at: string
-          description: string
-          id: string
-          images: string[] | null
-          location: string
-          name: string
-          price_per_hour: number
-          slug: string
-        }
-        Insert: {
-          amenities?: string[] | null
-          capacity: number
-          created_at?: string
-          description: string
-          id?: string
-          images?: string[] | null
-          location: string
-          name: string
-          price_per_hour: number
-          slug: string
-        }
-        Update: {
-          amenities?: string[] | null
-          capacity?: number
-          created_at?: string
-          description?: string
-          id?: string
-          images?: string[] | null
-          location?: string
-          name?: string
-          price_per_hour?: number
-          slug?: string
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      has_role: {
-        Args: { user_id: string; role: Database["public"]["Enums"]["app_role"] }
-        Returns: boolean
-      }
+      [_ in never]: never
     }
     Enums: {
-      app_role: "admin" | "user"
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never
@@ -263,8 +133,6 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {
-      app_role: ["admin", "user"],
-    },
+    Enums: {},
   },
 } as const
